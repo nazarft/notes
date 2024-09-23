@@ -1,0 +1,37 @@
+.c-panel {
+    border: 1px solid #000;
+    box-shadow: 10px 10px 14px -1px rgba(0,0,0,0.75);
+    display: flex;
+    margin-right: 10px;
+    flex-direction: column;
+    padding: 10px 10px;
+}
+.c-panel__header {
+    border-bottom: 1px solid #000;
+    background-color: rgb(149, 139, 139);
+    font-size: 14px;
+    padding: 10px;
+}
+
+.c-panel__header--xl {
+    font-size: 16px;
+    padding: 30px 30px; 
+}
+
+.c-panel__body {
+    font-size: 11px;
+    padding: 40px; 
+    flex-grow: 1; 
+}
+
+.c-panel__footer {
+    
+    background-color: rgb(149, 139, 139);
+    font-size: 12px;
+    padding: 10px; 
+}
+
+.c-panel__footer--xl {
+    font-size: 13px;
+    padding: 15px; 
+}
