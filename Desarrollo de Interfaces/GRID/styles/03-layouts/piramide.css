@@ -1,0 +1,31 @@
+.l-piramide {
+    display: grid;
+    grid-template-areas:
+        "cabecera-izquierda cabecera cabecera-derecha"
+        "lateral-izquierdo cuerpo lateral-derecho"
+        "pie pie pie"
+    ;
+
+}
+
+.l-piramide--invertido {
+    display: grid;
+    grid-template-areas:
+        "lateral-izquierdo . lateral-derecho"
+        ". cabecera ."
+    ;
+
+}
+
+.l-piramide__superior {
+    grid-area: cabecera;
+
+}
+
+.l-piramide__izquierdo {
+    grid-area: lateral-izquierdo;
+}
+
+.l-piramide__derecho {
+    grid-area: lateral-derecho;
+}
