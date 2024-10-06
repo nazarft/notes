@@ -376,3 +376,176 @@ public interface BookMapper {
 ## Respuesta
 
 Vamos a cambiar el tipo de retorno del getAll() y el findByIsbn().
+
+Ahora usaremos **@ReponseEntity** para enviar una respuesta HTTP.
+
+```java
+@RestController
+@RequestMapping(BookController.URL)
+@RequiredArgsConstructor
+public class BookController {
+ 
+    public static final String URL = "/api/books";
+ 
+    private final BookService bookService;
+ 
+    @GetMapping
+    public ResponseEntity<List<BookCollection>> getAll() {
+        List<BookCollection> bookCollections = bookService
+                .getAll()
+                .stream()
+                .map(BookMapper.INSTANCE::toBookCollection)
+                .toList();
+        return new ResponseEntity<>(bookCollections, HttpStatus.OK);
+    }
+ 
+ 
+    @GetMapping("/{isbn}")
+    public ResponseEntity<BookDetail> findByIsbn(@PathVariable String isbn) {
+        BookDetail bookDetail = BookMapper.INSTANCE.toBookDetail(bookService.findByIsbn(isbn));
+        return new ResponseEntity<>(bookDetail, HttpStatus.OK);
+    }
+ 
+}
+```
+Usar ResponseEntity es útil por las siguientes razones:
+
+👉 Permite establecer el código de estado HTTP que se desea enviar al cliente, lo que es útil para indicar el resultado de la operación (por ejemplo, HttpStatus.OK, HttpStatus.NOT_FOUND, etc.).
+
+👉 Puedes agregar encabezados personalizados a la respuesta, lo que puede ser útil para informar sobre el tipo de contenido, la caché, etc.
+
+👉 Permite enviar cualquier tipo de objeto como cuerpo de la respuesta, manteniendo la capacidad de enviar datos complejos sin perder la estructura de la respuesta HTTP.
+
+## Tratamiento de excepciones
+
+Podemos organizar las excepciones en un paquete común o en las capas correspondientes de la aplicación.
+
+En este caso, lo haremos en sus capas correspondientes:
+
+En nuestro caso, crearemos la excepción **ResourceNotFoundException** en la capa de dominio 🔴(domain/exception/ResourceNotFoundException)🔴.
+
+```java
+public class ResourceNotFoundException extends RuntimeException {
+ 
+    private static final String DESCRIPTION = "Resource not found";
+ 
+    public ResourceNotFoundException(String message) {
+        super(DESCRIPTION + ". " + message);
+    }
+}
+```
+
+y la lanzaremos así:
+
+```java
+@Service
+@RequiredArgsConstructor
+public class BookServiceImpl implements BookService {
+ 
+    private final BookRepository bookRepository;
+ 
+    @Override
+    public List<Book> getAll() {
+        return bookRepository.getAll();
+    }
+ 
+    @Override
+    public Book findByIsbn(String isbn) {
+        return bookRepository.findByIsbn(isbn).orElseThrow(() -> new ResourceNotFoundException("Book isbn " + isbn + " not found"));
+    }
+}
+```
+Spring nos ofrece una forma de centralizar el tratamiento de excepciones a través de la anotación @ControllerAdvice y así evitar
+los try...catch en el controlador.
+
+El uso de @ControllerAdvice permite definir un único lugar para manejar todas las excepciones que pueden ocurrir en los controladores de la aplicación. 
+
+Además, @ControllerAdvice proporciona flexibilidad para manejar diferentes tipos de excepciones de manera específica, lo que permite devolver respuestas personalizadas según la situación, con códigos de estado HTTP adecuados y mensajes de error descriptivos.
+
+Para manejar las excepciones en la aplicación de manera efectiva, crearemos dos clases en el paquete common: ErrorMessage y ApiExceptionHandler. Lo crearemos en 🔴(common/http_errors)🔴.
+
+### ErrorMessage
+
+La clase ErrorMessage se utiliza para representar un mensaje de error que se devolverá al cliente en caso de que ocurra una excepción. Aquí están los componentes clave:
+
+👉 Anotaciones @Getter y @ToString: Estas anotaciones provienen de Lombok, una biblioteca que simplifica el desarrollo de Java al generar automáticamente código común (como getters y toString) en tiempo de compilación.
+
+👉 Campos:
+
+	error: El tipo de excepción que ocurrió, que se obtiene usando exception.getClass().getSimpleName().
+	message: El mensaje específico de la excepción, obtenido con exception.getMessage().
+	code: Un código de estado HTTP que representa el tipo de error.
+👉 Constructor:
+
+El constructor de ErrorMessage toma una excepción y un código, y los asigna a los campos correspondientes.
+
+```java
+@Getter
+@ToString
+public class ErrorMessage {
+    private final String error;
+    private final String message;
+    private final int code;
+
+    public ErrorMessage(Exception exception, int code) {
+        this.error = exception.getClass().getSimpleName();
+        this.message = exception.getMessage();
+        this.code = code;
+    }
+}
+```
+### ApiExceptionHandler
+
+```java
+@ControllerAdvice
+public class ApiExceptionHandler {
+```
+
+Esta clase maneja las excepciones que pueden ocurrir en la aplicación y define cómo se deben responder a ellas. Aquí se utilizan dos anotaciones principales:
+
+👉 @ControllerAdvice: Esta anotación indica que la clase es un asesor global para controlar excepciones en todos los controladores de la aplicación. Permite centralizar la lógica de manejo de errores.
+
+👉 @ExceptionHandler: Esta anotación se utiliza para definir métodos que manejarán tipos específicos de excepciones.
+
+#### Métodos de manejos de excepciones
+
+1. Manejo de ResourceNotFoundException:
+
+```java
+@ResponseStatus(HttpStatus.NOT_FOUND)
+@ExceptionHandler(ResourceNotFoundException.class)
+@ResponseBody
+public ErrorMessage notFoundRequest(ResourceNotFoundException exception) {
+    return new ErrorMessage(exception, HttpStatus.NOT_FOUND.value());
+}
+```
+👉 @ResponseStatus(HttpStatus.NOT_FOUND): Esto establece que, cuando se lanza ResourceNotFoundException, la respuesta HTTP tendrá un código de estado 404 Not Found.
+
+👉 @ExceptionHandler(ResourceNotFoundException.class): Indica que este método maneja la excepción ResourceNotFoundException.
+
+👉 @ResponseBody: Permite que el método devuelva directamente el cuerpo de la respuesta HTTP. Aquí, se devuelve un objeto ErrorMessage que se convertirá automáticamente a JSON o XML, según la configuración del cliente.
+
+2. Manejo de Excepciones Generales:
+
+```java
+@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+@ExceptionHandler(Exception.class)
+@ResponseBody
+public ErrorMessage handleGeneralException(Exception exception) {
+    return new ErrorMessage(exception, HttpStatus.INTERNAL_SERVER_ERROR.value());
+}
+```
+
+👉 Este método maneja cualquier excepción que no haya sido capturada específicamente.
+
+👉 Se establece el código de estado 500 Internal Server Error para cualquier error general.
+
+👉 Similar al anterior, se crea y devuelve un objeto ErrorMessage con la información de la excepción.
+
+#### Flujo general
+
+1️⃣ Cuando ocurre una excepción en cualquier controlador de tu aplicación, Spring busca un método en las clases marcadas con @ControllerAdvice que pueda manejar esa excepción.
+
+2️⃣ Si la excepción es una instancia de ResourceNotFoundException, se llama al método notFoundRequest, que crea un ErrorMessage con la información de la excepción y lo devuelve al cliente con un código de estado 404.
+
+3️⃣ Si se lanza cualquier otra excepción, se llama al método handleGeneralException, que devuelve un ErrorMessage con un código de estado 500.
