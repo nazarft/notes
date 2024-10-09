@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de deseos</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <h1>
+            Lista de deseos
+        </h1>
+    </header>
+    <main>
+        <form id="destination-details-form">
+            <label for="name">Nombre de tu destino</label>
+            <input type="text" id="name" placeholder="Escribe un lugar" required>
+
+            <label for="location">Localización de tu destino</label>
+            <input type="text" id="location" placeholder="Escribe la localización" required>
+
+            <label for="photo">Foto</label>
+            <input type="url" id="photo" placeholder="Escribe el link de la foto">
+
+            <label for="description">Describe tu lugar</label>
+            <textarea id="description" placeholder="Escribe una descripción" required></textarea>
+
+            <button type="submit">Añadir a la lista</button>
+        </form>
+
+        <article>
+            <h2 class="title">Detalles de tu lista</h2>
+            <div class="destination-container">
+                <!--Aquí generamos el JS-->
+
+                <!--
+                <div class="card">
+                    <img width="300">
+                    <div class="card-body">
+                        <h3>Nombre del destino</h3>
+                        <h4>Localización del destino</h4>
+                        <p class="card-text">Descripción del destino</p>
+                        <button>Eliminar</button>
+                    </div>
+                    -->
+            </div>
+            </div>
+        </article>
+    </main>
+    <script src="script.js"></script>
+</body>
+
+</html>

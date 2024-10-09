@@ -1,0 +1,107 @@
+* {
+    font-family: 'Poppins', cursive;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+header {
+    background-color: #e81111;
+    position: relative;
+    height: 300px;
+    width: 100%;
+    border-bottom: 2px solid #000;
+}
+
+header h1 {
+    margin-top: 10px;
+
+    color: white;
+    text-shadow:
+        2px 2px 0px black,
+        -2px -2px 0px black,
+        -2px 2px 0px black,
+        2px -2px 0px black;
+    font-size: 40px;
+
+}
+
+
+
+main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #000;
+    border-radius: 40px;
+    background: linear-gradient(145deg, #dad5d5, #fffefe);
+    box-shadow: 17px 17px 13px #666464,
+        -17px -17px 13px #ffffff;
+    position: absolute;
+    width: 90%;
+    top: 20%;
+}
+
+label {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    width: 300px;
+
+}
+
+input {
+    padding: 10px 10px;
+    width: 100%;
+    border: 2px solid #000;
+}
+
+article {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+}
+
+img {
+    width: 300px;
+}
+
+.img-pretty {
+    border: 2px solid #000;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px 10px;
+    border: 2px solid #000;
+}
+
+button {
+    color: #eee;
+    margin: 10px 10px;
+    padding: 20px 20px;
+    background-color: #e81111;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #000;
+}
