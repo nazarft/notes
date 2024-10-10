@@ -71,4 +71,5 @@ function createDestinationCard(name, location, photoUrl, description) {
 
     return card;
 }
+
 detailsForm.addEventListener('submit', handleFormSubmit);
