@@ -1,2 +1,2 @@
 # notes
-Apuntes de segundo
+Notas de aprendizaje
