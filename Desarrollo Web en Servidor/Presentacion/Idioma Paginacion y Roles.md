@@ -131,5 +131,145 @@ public class CategoryRowMapper implements CustomRowMapper<Category> {
 ```
 🔴 Sería mejor hacerlo en la consulta de la base de datos.
 
+# Paginación 
+Creamos en la ruta controller/common donde guardaremos la nueva clase **PaginatedResponse**.
 
+```java
+@Data
+@AllArgsConstructor
+public class PaginatedResponse<T> {
+    private List<T> data;
+    private int total;
+    private int currentPage;
+    private int pageSize;
+    private String next;
+    private String previous;
+ 
+    public PaginatedResponse(List<T> data, int total, int currentPage, int pageSize, String baseUrl) {
+        this.data = data;
+        this.total = total;
+        this.currentPage = currentPage;
+        this.pageSize = pageSize;
+        this.next = createNextLink(baseUrl);
+        this.previous = createPreviousLink(baseUrl);
+    }
+ 
+    private String createNextLink(String baseUrl) {
+        if(currentPage * pageSize < total) {
+            return baseUrl + "?page=" + (currentPage + 1) + "&size=" + pageSize;
+        }
+        return null;
+    }
+ 
+    private String createPreviousLink(String baseUrl) {
+        if(currentPage > 1) {
+            return baseUrl + "?page=" + (currentPage - 1) + "&size=" + pageSize;
+        }
+        return null;
+    }
+}
+```
+De esta manera, PaginatedReponse <T> recibirá un genérico, es decir, acepta cualquier tipo de dato.
+
+Crearemos dos métodos privados que crearan un link previo y siguiente.
+
+### Application properties
+```java
+app.base.url=http://localhost:8080
+app.pageSize.default=10
+```
+Modificamos así nuestro controller con los métodos:
+```java
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+@RestController
+@RequiredArgsConstructor
+@RequestMapping(BookController.URL)
+public class BookController {
+ 
+    public static final String URL = "/api/books";
+    @Value("${app.base.url}")
+    private String baseUrl;
+ 
+    @Value("${app.pageSize.default}")
+    private String defaultPageSize;
+ 
+    private final BookService bookService;
+ 
+    @GetMapping
+    public ResponseEntity<PaginatedResponse<BookCollection>> getAll(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(required = false) Integer size) {
+        int pageSize = (size != null) ? size : Integer.parseInt(defaultPageSize);
+        List<BookCollection> books = bookService
+                .getAll(page - 1, pageSize)
+                .stream()
+                .map(BookMapper.INSTANCE::toBookCollection)
+                .toList();
+ 
+        int total = bookService.count();
+ 
+        PaginatedResponse<BookCollection> response = new PaginatedResponse<>(books, total, page, pageSize, baseUrl + URL);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+```
+En BookService:
+```java
+@Override
+public List<Book> getAll(int page, int size) {
+    return bookRepository.getAll(page, size);
+}
+ 
+@Override
+public int count() {
+    return bookRepository.count();
+```
+En BookRepository:
+```java
+@Override
+public List<Book> getAll(int page, int size) {
+    String sql = """
+                    SELECT * FROM books
+                    LIMIT ? OFFSET ?
+                 """;
+    return jdbcTemplate.query(sql, new BookRowMapper(), size, page * size);
+}
+ 
+@Override
+public int count() {
+    String sql = """
+                    SELECT COUNT(*) FROM books
+                 """;
+    return jdbcTemplate.queryForObject(sql, Integer.class);
+}
+```
   
