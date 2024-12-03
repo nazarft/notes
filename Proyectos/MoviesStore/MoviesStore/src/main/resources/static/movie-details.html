@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de la Película</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<h1>Detalles de la Película</h1>
+<div id="movie-details"></div>
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+
+    window.onload = function() {
+        if (code) {
+            fetch(`http://localhost:8080/api/movies/${code}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la respuesta de la red: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(movie => {
+                    renderMovieDetails(movie);
+                })
+                .catch(error => console.error('Error al obtener los detalles de la película:', error));
+        }
+    };
+
+    function renderMovieDetails(movie) {
+        const movieDetails = document.getElementById('movie-details');
+        movieDetails.innerHTML = `
+            <h2>${movie.title_es}</h2>
+            <img width= 400 src="/images/${movie.image}" alt="${movie.title_es}">
+            <p>Descripción: ${movie.synopsis_es}</p>
+        `;
+    }
+</script>
+</body>
+</html>
