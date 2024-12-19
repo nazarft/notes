@@ -1,4 +1,4 @@
-package com.fpmislata.MoviesStore.persistence.dao.jdbc;
+package com.fpmislata.MoviesStore.persistence.dao.impl.jdbc;
 
 import com.fpmislata.MoviesStore.domain.model.Director;
 import com.fpmislata.MoviesStore.persistence.dao.DirectorDao;
@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -24,5 +25,39 @@ public class DirectorDaoImpl implements DirectorDao {
         } catch (Exception e){
             return Optional.empty();
         }
+    }
+
+    @Override
+    public List<Director> getAll() {
+        return List.of();
+    }
+
+    @Override
+    public List<Director> getAll(int page, int size) {
+        return List.of();
+    }
+
+    @Override
+    public long insert(Director director) {
+        return 0;
+    }
+
+    @Override
+    public void update(Director director) {
+
+    }
+
+    @Override
+    public void delete(Long id) {
+
+    }
+
+    @Override
+    public int count() {
+        return 0;
+    }
+
+    @Override
+    public void save(Director director) {
     }
 }

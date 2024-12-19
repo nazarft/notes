@@ -4,6 +4,6 @@ import com.fpmislata.MoviesStore.domain.model.ContentRating;
 
 import java.util.Optional;
 
-public interface ContentRatingDao {
+public interface ContentRatingDao extends GenericDao<ContentRating> {
     Optional<ContentRating> findById(Long id);
 }

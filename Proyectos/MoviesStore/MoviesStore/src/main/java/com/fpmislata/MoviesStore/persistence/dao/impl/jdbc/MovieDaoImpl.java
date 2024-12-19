@@ -1,4 +1,4 @@
-package com.fpmislata.MoviesStore.persistence.dao.jdbc;
+package com.fpmislata.MoviesStore.persistence.dao.impl.jdbc;
 
 import com.fpmislata.MoviesStore.domain.model.Actor;
 import com.fpmislata.MoviesStore.domain.model.Genre;
@@ -23,6 +23,12 @@ public class MovieDaoImpl implements MovieDao {
     private final JdbcTemplate jdbcTemplate;
     private final ActorDao actorDao;
     private final GenreDao genreDao;
+
+    @Override
+    public List<Movie> getAll() {
+        return List.of();
+    }
+
     @Override
     public List<Movie> getAll(int page, int size) {
         String sql = "SELECT * FROM movies LIMIT ? OFFSET ?";
@@ -100,10 +106,10 @@ public class MovieDaoImpl implements MovieDao {
         jdbcTemplate.update(
                 sql,
                 movie.getCode(),
-                movie.getTitle_es(),
-                movie.getTitle_en(),
-                movie.getSynopsis_es(),
-                movie.getSynopsis_en(),
+                movie.getTitleEs(),
+                movie.getTitleEn(),
+                movie.getSynopsisEs(),
+                movie.getSynopsisEn(),
                 movie.getImage(),
                 movie.getContentRating().getId(),
                 movie.getDirector().getId(),
@@ -138,10 +144,10 @@ public class MovieDaoImpl implements MovieDao {
                 connection -> {
                     PreparedStatement preparedStatement = connection.prepareStatement(sql, new String[]{"id"});
                     preparedStatement.setString(1, movie.getCode());
-                    preparedStatement.setString(2, movie.getTitle_es());
-                    preparedStatement.setString(3, movie.getTitle_en());
-                    preparedStatement.setString(4, movie.getSynopsis_es());
-                    preparedStatement.setString(5, movie.getSynopsis_en());
+                    preparedStatement.setString(2, movie.getTitleEs());
+                    preparedStatement.setString(3, movie.getTitleEn());
+                    preparedStatement.setString(4, movie.getSynopsisEs());
+                    preparedStatement.setString(5, movie.getSynopsisEn());
                     preparedStatement.setString(6, movie.getImage());
                     preparedStatement.setLong(7, movie.getContentRating().getId());
                     preparedStatement.setLong(8, movie.getDirector().getId());

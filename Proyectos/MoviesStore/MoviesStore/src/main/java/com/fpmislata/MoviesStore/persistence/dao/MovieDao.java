@@ -8,15 +8,8 @@ import java.awt.print.Book;
 import java.util.List;
 import java.util.Optional;
 
-public interface MovieDao {
-    List<Movie> getAll(int page, int size);
+public interface MovieDao extends GenericDao<Movie> {
     Optional<Movie> findByCode(String code);
-    Optional<Movie> findById(Long id);
-    int count();
-    void save(Movie movie);
-    void update(Movie movie);
-    void delete(Long id);
-    long insert(Movie movie);
     void insertActors(Long idMovie, List<Actor> actors);
     void deleteActors(Long idMovie);
     void insertGenres(Long idMovie, List<Genre> genres);

@@ -13,31 +13,31 @@ import java.util.List;
 public class Movie {
     private Long id;
     private String code;
-    private String title_es;
-    private String title_en;
-    private String synopsis_en;
-    private String synopsis_es;
+    private String titleEs;
+    private String titleEn;
+    private String synopsisEn;
+    private String synopsisEs;
     private String image;
     private Director director;
     private ContentRating contentRating;
     private List<Actor> actors;
     private List<Genre> genres;
-    @JsonIgnore
+
     public String getTitle(){
         String language = LanguageUtils.getCurrentLanguage();
         if("en".equals(language)){
-            return title_en;
+            return titleEn;
         } else{
-            return title_es;
+            return titleEs;
         }
     }
     @JsonIgnore
     public String getSynopsis(){
         String language = LanguageUtils.getCurrentLanguage();
         if("en".equals(language)){
-            return synopsis_en;
+            return synopsisEn;
         }
-        return synopsis_es;
+        return synopsisEs;
     }
 
 }

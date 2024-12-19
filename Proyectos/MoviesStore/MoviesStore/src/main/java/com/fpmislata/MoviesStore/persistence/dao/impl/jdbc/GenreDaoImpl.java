@@ -1,4 +1,4 @@
-package com.fpmislata.MoviesStore.persistence.dao.jdbc;
+package com.fpmislata.MoviesStore.persistence.dao.impl.jdbc;
 
 import com.fpmislata.MoviesStore.domain.model.Genre;
 import com.fpmislata.MoviesStore.persistence.dao.GenreDao;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -35,5 +36,44 @@ public class GenreDaoImpl implements GenreDao {
         List<Long> idList = List.of(ids);
         Map<String, Object> params = Map.of("ids", idList);
         return namedParameterJdbcTemplate.query(sql, params, new GenreRowMapper());
+    }
+
+    @Override
+    public List<Genre> getAll() {
+        return List.of();
+    }
+
+    @Override
+    public List<Genre> getAll(int page, int size) {
+        return List.of();
+    }
+
+    @Override
+    public Optional<Genre> findById(Long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public long insert(Genre genre) {
+        return 0;
+    }
+
+    @Override
+    public void update(Genre genre) {
+
+    }
+
+    @Override
+    public void delete(Long id) {
+
+    }
+
+    @Override
+    public int count() {
+        return 0;
+    }
+
+    @Override
+    public void save(Genre genre) {
     }
 }

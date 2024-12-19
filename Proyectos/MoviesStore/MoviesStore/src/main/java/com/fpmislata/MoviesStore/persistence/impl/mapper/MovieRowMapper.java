@@ -15,10 +15,10 @@ public class MovieRowMapper implements CustomRowMapper<Movie> {
         Movie movie = new Movie();
         movie.setId(rs.getLong("movies.id"));
         movie.setCode(rs.getString("movies.code"));
-        movie.setTitle_es(rs.getString("movies.title_es"));
-        movie.setTitle_en(rs.getString("movies.title_en"));
-        movie.setSynopsis_es(rs.getString("movies.synopsis_es"));
-        movie.setSynopsis_en(rs.getString("movies.synopsis_en"));
+        movie.setTitleEs(rs.getString("movies.title_es"));
+        movie.setTitleEn(rs.getString("movies.title_en"));
+        movie.setSynopsisEs(rs.getString("movies.synopsis_es"));
+        movie.setSynopsisEn(rs.getString("movies.synopsis_en"));
         movie.setImage(rs.getString("movies.image"));
         if(this.existsColumn(rs, "director.id")){
             movie.setDirector(directorRowMapper.mapRow(rs,rowNum));
