@@ -10,13 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Genre {
     private long id;
-    private String name_es;
-    private String name_en;
+    private String nameEs;
+    private String nameEn;
     public String getName(){
         String language = LanguageUtils.getCurrentLanguage();
         if("en".equals(language)){
-            return name_en;
+            return nameEn;
         }
-        return name_es;
+        return nameEs;
     }
 }

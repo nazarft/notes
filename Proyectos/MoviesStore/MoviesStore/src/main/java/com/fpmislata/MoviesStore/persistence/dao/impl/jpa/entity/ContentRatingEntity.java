@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "content_ratings")
 public class ContentRatingEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String rating;
     private String description;

@@ -1,6 +1,7 @@
 package com.fpmislata.MoviesStore.persistence.dao.impl.jpa;
 
 import com.fpmislata.MoviesStore.domain.model.Director;
+import com.fpmislata.MoviesStore.domain.model.PageWithCount;
 import com.fpmislata.MoviesStore.persistence.dao.DirectorDao;
 import com.fpmislata.MoviesStore.persistence.dao.impl.jpa.mapper.DirectorJpaMapper;
 import com.fpmislata.MoviesStore.persistence.dao.impl.jpa.repository.DirectorJpaRepository;
@@ -26,8 +27,8 @@ public class DirectorDaoJpa implements DirectorDao {
     }
 
     @Override
-    public List<Director> getAll(int page, int size) {
-        return List.of();
+    public PageWithCount<Director> getAll(int page, int size) {
+        return null;
     }
 
 

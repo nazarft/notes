@@ -4,6 +4,7 @@ import com.fpmislata.MoviesStore.controller.admin.webModel.movie.MovieCollection
 import com.fpmislata.MoviesStore.controller.common.PaginatedResponse;
 import com.fpmislata.MoviesStore.controller.admin.webModel.movie.MovieMapper;
 import com.fpmislata.MoviesStore.domain.model.Movie;
+import com.fpmislata.MoviesStore.domain.model.PageWithCount;
 import com.fpmislata.MoviesStore.domain.usecase.movie.MovieCountUseCase;
 import com.fpmislata.MoviesStore.domain.usecase.movie.MovieFindByCodeUseCase;
 import com.fpmislata.MoviesStore.domain.usecase.movie.MovieGetAllUseCase;
@@ -42,18 +43,14 @@ public class MovieAdminController {
             @RequestParam(required = false) Integer size
     ){
         int pageSize = (size != null) ? size : Integer.parseInt(defaultPageSize);
-        List<MovieCollectionResponse> movieCollectionResponses = movieGetAllUseCase
-                .execute(page - 1, pageSize)
-                .stream()
-                .map(movie -> MovieMapper.INSTANCE.toMovieCollection(movie))
-                .toList();
-        int total = movieCountUse.execute();
-
-        PaginatedResponse<MovieCollectionResponse> response = new PaginatedResponse<>(movieCollectionResponses,
-                total,
-                page,
-                pageSize,
-                baseUrl + URL);
+        PageWithCount<Movie> moviePageWithCount = movieGetAllUseCase.execute(page -1, pageSize);
+        PaginatedResponse<MovieCollectionResponse> response = new PaginatedResponse<>(
+                moviePageWithCount
+                        .getData()
+                        .stream()
+                        .map(MovieMapper.INSTANCE::toMovieCollection)
+                        .toList(),
+                moviePageWithCount.getCount(),page, pageSize, baseUrl + URL);
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }

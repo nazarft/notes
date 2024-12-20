@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface MovieJpaRepository extends JpaRepository<MovieEntity,Long> {
 
     @EntityGraph(attributePaths = {"director", "contentRating"})
-    MovieEntity findByCode(String code);
+    Optional<MovieEntity> findByCode(String code);
     @Override
     @Query(value = """
             SELECT * FROM movies m

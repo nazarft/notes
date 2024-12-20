@@ -7,13 +7,13 @@ import java.util.List;
 @Data
 public class PaginatedResponse<T>{
     private List<T> data;
-    private int total;
+    private long total;
     private int currentPage;
     private int pageSize;
     private String next;
     private String previous;
 
-    public PaginatedResponse(List<T> data, int total, int currentPage, int pageSize, String baseUrl) {
+    public PaginatedResponse(List<T> data, long total, int currentPage, int pageSize, String baseUrl) {
         this.data = data;
         this.total = total;
         this.currentPage = currentPage;

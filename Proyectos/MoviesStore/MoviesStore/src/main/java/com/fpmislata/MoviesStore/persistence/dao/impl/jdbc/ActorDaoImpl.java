@@ -1,6 +1,7 @@
 package com.fpmislata.MoviesStore.persistence.dao.impl.jdbc;
 
 import com.fpmislata.MoviesStore.domain.model.Actor;
+import com.fpmislata.MoviesStore.domain.model.PageWithCount;
 import com.fpmislata.MoviesStore.persistence.dao.ActorDao;
 import com.fpmislata.MoviesStore.persistence.impl.mapper.ActorRowMapper;
 import lombok.RequiredArgsConstructor;
@@ -45,8 +46,8 @@ public class ActorDaoImpl implements ActorDao {
     }
 
     @Override
-    public List<Actor> getAll(int page, int size) {
-        return List.of();
+    public PageWithCount<Actor> getAll(int page, int size) {
+        return null;
     }
 
     @Override

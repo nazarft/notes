@@ -1,6 +1,7 @@
 package com.fpmislata.MoviesStore.persistence.dao.impl.jdbc;
 
 import com.fpmislata.MoviesStore.domain.model.Director;
+import com.fpmislata.MoviesStore.domain.model.PageWithCount;
 import com.fpmislata.MoviesStore.persistence.dao.DirectorDao;
 import com.fpmislata.MoviesStore.persistence.impl.mapper.DirectorRowMapper;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +34,8 @@ public class DirectorDaoImpl implements DirectorDao {
     }
 
     @Override
-    public List<Director> getAll(int page, int size) {
-        return List.of();
+    public PageWithCount<Director> getAll(int page, int size) {
+        return null;
     }
 
     @Override

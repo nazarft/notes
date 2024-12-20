@@ -1,6 +1,7 @@
 package com.fpmislata.MoviesStore.persistence.dao.impl.jdbc;
 
 import com.fpmislata.MoviesStore.domain.model.Genre;
+import com.fpmislata.MoviesStore.domain.model.PageWithCount;
 import com.fpmislata.MoviesStore.persistence.dao.GenreDao;
 import com.fpmislata.MoviesStore.persistence.impl.mapper.GenreRowMapper;
 import lombok.RequiredArgsConstructor;
@@ -44,8 +45,8 @@ public class GenreDaoImpl implements GenreDao {
     }
 
     @Override
-    public List<Genre> getAll(int page, int size) {
-        return List.of();
+    public PageWithCount<Genre> getAll(int page, int size) {
+        return null;
     }
 
     @Override

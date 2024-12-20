@@ -1,9 +1,6 @@
 package com.fpmislata.MoviesStore.persistence.dao.impl.jpa.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +12,8 @@ public class GenreEntity {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "name_en")
     private String nameEn;
+    @Column(name = "name_es")
     private String nameEs;
 }

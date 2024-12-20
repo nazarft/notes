@@ -3,12 +3,11 @@ package com.fpmislata.MoviesStore.persistence.dao.impl.jpa;
 import com.fpmislata.MoviesStore.domain.model.Actor;
 import com.fpmislata.MoviesStore.domain.model.Genre;
 import com.fpmislata.MoviesStore.domain.model.Movie;
+import com.fpmislata.MoviesStore.domain.model.PageWithCount;
 import com.fpmislata.MoviesStore.persistence.dao.MovieDao;
-import com.fpmislata.MoviesStore.persistence.dao.impl.jpa.entity.ActorEntity;
 import com.fpmislata.MoviesStore.persistence.dao.impl.jpa.entity.MovieEntity;
 import com.fpmislata.MoviesStore.persistence.dao.impl.jpa.mapper.ActorJpaMapper;
 import com.fpmislata.MoviesStore.persistence.dao.impl.jpa.mapper.MovieJpaMapper;
-import com.fpmislata.MoviesStore.persistence.dao.impl.jpa.repository.ActorJpaRepository;
 import com.fpmislata.MoviesStore.persistence.dao.impl.jpa.repository.MovieJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
@@ -24,11 +23,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MovieDaoJpa implements MovieDao {
     private final MovieJpaRepository movieJpaRepository;
-    private final ActorJpaRepository actorJpaRepository;
 
     @Override
     public Optional<Movie> findByCode(String code) {
-            return Optional.ofNullable(movieJpaRepository.findByCode(code))
+            return movieJpaRepository.findByCode(code)
                     .map(movie -> MovieJpaMapper.INSTANCE.toMovieWithDetails(movie));
     }
     @Override
@@ -65,14 +63,16 @@ public class MovieDaoJpa implements MovieDao {
     }
 
     @Override
-    public List<Movie> getAll(int page, int size) {
+    public PageWithCount<Movie> getAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<MovieEntity> movieEntities = movieJpaRepository.findAll(pageable);
-        return movieEntities.getContent()
-                .stream()
-                .map(movie -> MovieJpaMapper.INSTANCE.toMovie(movie))
-                .toList();
-
+        Page<MovieEntity> movieEntityPage = movieJpaRepository.findAll(pageable);
+        return new PageWithCount<Movie>(
+                movieEntityPage
+                        .stream()
+                        .map(movie -> MovieJpaMapper.INSTANCE.toMovie(movie))
+                        .toList(),
+                movieEntityPage.getTotalElements()
+        );
     }
 
     @Override

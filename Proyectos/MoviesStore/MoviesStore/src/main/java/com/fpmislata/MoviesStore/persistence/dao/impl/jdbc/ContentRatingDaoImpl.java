@@ -1,6 +1,7 @@
 package com.fpmislata.MoviesStore.persistence.dao.impl.jdbc;
 
 import com.fpmislata.MoviesStore.domain.model.ContentRating;
+import com.fpmislata.MoviesStore.domain.model.PageWithCount;
 import com.fpmislata.MoviesStore.persistence.dao.ContentRatingDao;
 import com.fpmislata.MoviesStore.persistence.impl.mapper.ContentRatingRowMapper;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +34,8 @@ public class ContentRatingDaoImpl implements ContentRatingDao {
     }
 
     @Override
-    public List<ContentRating> getAll(int page, int size) {
-        return List.of();
+    public PageWithCount<ContentRating> getAll(int page, int size) {
+        return null;
     }
 
 

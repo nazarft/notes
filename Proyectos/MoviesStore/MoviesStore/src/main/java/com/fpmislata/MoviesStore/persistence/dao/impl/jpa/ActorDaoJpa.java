@@ -1,6 +1,7 @@
 package com.fpmislata.MoviesStore.persistence.dao.impl.jpa;
 
 import com.fpmislata.MoviesStore.domain.model.Actor;
+import com.fpmislata.MoviesStore.domain.model.PageWithCount;
 import com.fpmislata.MoviesStore.persistence.dao.ActorDao;
 import com.fpmislata.MoviesStore.persistence.dao.impl.jpa.entity.ActorEntity;
 import com.fpmislata.MoviesStore.persistence.dao.impl.jpa.mapper.ActorJpaMapper;
@@ -45,13 +46,16 @@ public class ActorDaoJpa implements ActorDao {
     }
 
     @Override
-    public List<Actor> getAll(int page, int size) {
+    public PageWithCount<Actor> getAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ActorEntity> actorEntities = actorJpaRepository.findAll(pageable);
-        return actorEntities.getContent()
-                .stream()
-                .map(actor -> ActorJpaMapper.INSTANCE.toActor(actor))
-                .toList();
+        return new PageWithCount<>(
+                actorEntities.getContent()
+                        .stream()
+                        .map(actor -> ActorJpaMapper.INSTANCE.toActor(actor))
+                        .toList(),
+                actorEntities.getNumberOfElements()
+        );
     }
 
     @Override

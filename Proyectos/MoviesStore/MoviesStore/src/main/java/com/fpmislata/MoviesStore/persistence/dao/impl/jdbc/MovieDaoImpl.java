@@ -3,6 +3,7 @@ package com.fpmislata.MoviesStore.persistence.dao.impl.jdbc;
 import com.fpmislata.MoviesStore.domain.model.Actor;
 import com.fpmislata.MoviesStore.domain.model.Genre;
 import com.fpmislata.MoviesStore.domain.model.Movie;
+import com.fpmislata.MoviesStore.domain.model.PageWithCount;
 import com.fpmislata.MoviesStore.persistence.dao.ActorDao;
 import com.fpmislata.MoviesStore.persistence.dao.GenreDao;
 import com.fpmislata.MoviesStore.persistence.dao.MovieDao;
@@ -13,6 +14,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
+import java.awt.print.Book;
 import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Optional;
@@ -30,9 +32,11 @@ public class MovieDaoImpl implements MovieDao {
     }
 
     @Override
-    public List<Movie> getAll(int page, int size) {
+    public PageWithCount<Movie> getAll(int page, int size) {
         String sql = "SELECT * FROM movies LIMIT ? OFFSET ?";
-        return jdbcTemplate.query(sql, new MovieRowMapper(),size, page * size);
+        List<Movie> books = jdbcTemplate.query(sql, new MovieRowMapper(),size, page * size);
+        int count = this.count();
+        return new PageWithCount<>(books, count);
     }
 
     @Override

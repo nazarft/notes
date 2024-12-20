@@ -12,14 +12,14 @@ public class Actor {
     private long id;
     private String name;
     private String nationality;
-    private String biography_en;
-    private String biography_es;
+    private String biographyEn;
+    private String biographyEs;
 
     public String getBiography(){
         String language = LanguageUtils.getCurrentLanguage();
         if ("en".equals(language)) {
-            return biography_en;
+            return biographyEn;
         }
-        return biography_es;
+        return biographyEs;
         }
 }

@@ -1,6 +1,7 @@
 package com.fpmislata.MoviesStore.domain.service.impl;
 
 import com.fpmislata.MoviesStore.domain.model.Movie;
+import com.fpmislata.MoviesStore.domain.model.PageWithCount;
 import com.fpmislata.MoviesStore.domain.repository.MovieRepository;
 import com.fpmislata.MoviesStore.domain.service.MovieService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ public class MovieServiceImpl implements MovieService {
     private final MovieRepository movieRepository;
 
     @Override
-    public List<Movie> getAll(int page, int size) {
+    public PageWithCount<Movie> getAll(int page, int size) {
         return movieRepository.getAll(page, size);
     }
 

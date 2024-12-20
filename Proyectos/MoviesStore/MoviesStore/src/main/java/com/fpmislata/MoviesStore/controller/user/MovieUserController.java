@@ -5,6 +5,7 @@ import com.fpmislata.MoviesStore.controller.user.webModel.movie.MovieCollectionR
 import com.fpmislata.MoviesStore.controller.user.webModel.movie.MovieResponse;
 import com.fpmislata.MoviesStore.controller.user.webModel.movie.MovieMapper;
 import com.fpmislata.MoviesStore.domain.model.Movie;
+import com.fpmislata.MoviesStore.domain.model.PageWithCount;
 import com.fpmislata.MoviesStore.domain.usecase.movie.MovieCountUseCase;
 import com.fpmislata.MoviesStore.domain.usecase.movie.MovieFindByCodeUseCase;
 import com.fpmislata.MoviesStore.domain.usecase.movie.MovieGetAllUseCase;
@@ -13,8 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,20 +36,15 @@ public class MovieUserController {
             @RequestParam(required = false) Integer size
     ){
         int pageSize = (size != null) ? size : Integer.parseInt(defaultPageSize);
-        List<MovieCollectionResponse> movieCollectionResponses = movieGetAllUseCase
-                .execute(page - 1, pageSize)
-                .stream()
-                .map(movie -> MovieMapper.INSTANCE.toMovieCollection(movie))
-                .toList();
-        int total = movieCountUse.execute();
-
-        PaginatedResponse<MovieCollectionResponse> response = new PaginatedResponse<>(movieCollectionResponses,
-                total,
-                page,
-                pageSize,
-                baseUrl + URL);
+        PageWithCount<Movie> moviePageWithCount = movieGetAllUseCase.execute(page -1, pageSize);
+        PaginatedResponse<MovieCollectionResponse> response = new PaginatedResponse<>(
+                moviePageWithCount
+                        .getData()
+                        .stream()
+                        .map(MovieMapper.INSTANCE::toMovieCollection)
+                        .toList(),
+                moviePageWithCount.getCount(),page, pageSize, baseUrl + URL);
         return new ResponseEntity<>(response, HttpStatus.OK);
-
     }
 
     @GetMapping("/{code}")
@@ -59,4 +53,6 @@ public class MovieUserController {
         MovieResponse movieResponse = MovieMapper.INSTANCE.toMovieDetail(movie);
         return new ResponseEntity<>(movieResponse, HttpStatus.OK);
     }
+
+
 }

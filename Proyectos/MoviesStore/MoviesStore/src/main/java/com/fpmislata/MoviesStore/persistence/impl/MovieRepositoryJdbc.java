@@ -1,6 +1,7 @@
 package com.fpmislata.MoviesStore.persistence.impl;
 
 import com.fpmislata.MoviesStore.domain.model.Movie;
+import com.fpmislata.MoviesStore.domain.model.PageWithCount;
 import com.fpmislata.MoviesStore.domain.repository.ActorRepository;
 import com.fpmislata.MoviesStore.domain.repository.GenreRepository;
 import com.fpmislata.MoviesStore.domain.repository.MovieRepository;
@@ -18,7 +19,7 @@ public class MovieRepositoryJdbc implements MovieRepository {
     private final MovieDao movieDao;
 
     @Override
-    public List<Movie> getAll(Integer page, Integer size) {
+    public PageWithCount<Movie> getAll(Integer page, Integer size) {
         return movieDao.getAll(page, size);
     }
 

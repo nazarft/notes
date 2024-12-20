@@ -15,8 +15,8 @@ public class ActorRowMapper implements RowMapper<Actor> {
         actor.setId(rs.getInt("actors.id"));
         actor.setName(rs.getString("actors.name"));
         actor.setNationality(rs.getString("actors.nationality"));
-        actor.setBiography_es(rs.getString("actors.biography_es"));
-        actor.setBiography_en(rs.getString("actors.biography_en"));
+        actor.setBiographyEs(rs.getString("actors.biography_es"));
+        actor.setBiographyEn(rs.getString("actors.biography_en"));
 
         return actor;
     }

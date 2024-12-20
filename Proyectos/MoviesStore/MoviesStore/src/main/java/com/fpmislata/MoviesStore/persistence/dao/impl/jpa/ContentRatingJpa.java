@@ -1,6 +1,7 @@
 package com.fpmislata.MoviesStore.persistence.dao.impl.jpa;
 
 import com.fpmislata.MoviesStore.domain.model.ContentRating;
+import com.fpmislata.MoviesStore.domain.model.PageWithCount;
 import com.fpmislata.MoviesStore.persistence.dao.ContentRatingDao;
 import com.fpmislata.MoviesStore.persistence.dao.impl.jpa.mapper.ContentRatingJpaMapper;
 import com.fpmislata.MoviesStore.persistence.dao.impl.jpa.repository.ContentRatingJpaRepository;
@@ -29,8 +30,8 @@ public class ContentRatingJpa implements ContentRatingDao {
     }
 
     @Override
-    public List<ContentRating> getAll(int page, int size) {
-        return List.of();
+    public PageWithCount<ContentRating> getAll(int page, int size) {
+        return null;
     }
     @Override
     public long insert(ContentRating contentRating) {
